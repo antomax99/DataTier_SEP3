@@ -1,9 +1,10 @@
 package com.example.datatier_sep3.daos;
 
-import com.example.datatier_sep3.models.User;
+import com.example.datatier_sep3.models.entities.User;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAOImpl implements UserDAO {
@@ -22,10 +23,38 @@ public class UserDAOImpl implements UserDAO {
     }
 
     private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/database_sep3", "postgres", "1234");
+        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/database_sep3", "postgres", "123456");
     }
 
 
+    @Override
+    public List<User> getAllUsers() throws IOException {
+        List<User> usersFound = new ArrayList<>();
+        try(Connection connection = getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM database_sep3.public.users WHERE security_level = ?");
+            statement.setInt(1, 1);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                int id = resultSet.getInt("id");
+                String userName = resultSet.getString("username");
+                String password = resultSet.getString("password");
+                String firstname = resultSet.getString("first_name");
+                String lastname = resultSet.getString("last_name");
+                String email = resultSet.getString("email");
+                int securityLevel = resultSet.getInt("security_level");
+                User user = new User(id,userName,password,firstname,lastname,email,securityLevel);
+                System.out.println(user.toString());
+                usersFound.add(user);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(usersFound.toString());
+        return usersFound;
+    }
 
     @Override
     public User getUserById(int id) {

@@ -1,13 +1,15 @@
 package com.example.datatier_sep3.models;
 
 
+import com.example.datatier_sep3.contracts.UserModel;
 import com.example.datatier_sep3.daos.UserDAOImpl;
+import com.example.datatier_sep3.models.entities.User;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-public class UserModelImpl implements UserModel{
+public class UserModelImpl implements UserModel {
 
     private UserDAOImpl userDAO;
     {
@@ -19,8 +21,10 @@ public class UserModelImpl implements UserModel{
     }
 
 
-
-
+    @Override
+    public List<User> getAllUsers() throws IOException {
+        return userDAO.getAllUsers();
+    }
 
     @Override
     public User getUserById(int id) {

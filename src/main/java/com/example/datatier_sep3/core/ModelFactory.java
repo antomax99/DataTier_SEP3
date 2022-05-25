@@ -1,5 +1,8 @@
 package com.example.datatier_sep3.core;
 
+import com.example.datatier_sep3.contracts.OrderModel;
+import com.example.datatier_sep3.contracts.ProductModel;
+import com.example.datatier_sep3.contracts.UserModel;
 import com.example.datatier_sep3.models.*;
 
 public class ModelFactory {

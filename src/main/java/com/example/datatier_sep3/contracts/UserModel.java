@@ -1,9 +1,12 @@
-package com.example.datatier_sep3.models;
+package com.example.datatier_sep3.contracts;
+
+import com.example.datatier_sep3.models.entities.User;
 
 import java.io.IOException;
 import java.util.List;
 
 public interface UserModel {
+    List<User> getAllUsers() throws IOException;
     User getUserById(int id);
     void addUser(User user) ;
     void deleteUserById(int id);

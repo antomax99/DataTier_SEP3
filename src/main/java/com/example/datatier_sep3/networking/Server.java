@@ -1,6 +1,6 @@
 package com.example.datatier_sep3.networking;
 
-import com.example.datatier_sep3.models.UserModel;
+import com.example.datatier_sep3.contracts.UserModel;
 
 import java.io.IOException;
 import java.net.ServerSocket;

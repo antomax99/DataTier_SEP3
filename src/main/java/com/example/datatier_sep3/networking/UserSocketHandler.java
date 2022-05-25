@@ -1,7 +1,7 @@
 package com.example.datatier_sep3.networking;
 
-import com.example.datatier_sep3.models.User;
-import com.example.datatier_sep3.models.UserModel;
+import com.example.datatier_sep3.models.entities.User;
+import com.example.datatier_sep3.contracts.UserModel;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.List;
 
 public class UserSocketHandler implements Runnable {
 
@@ -45,6 +46,9 @@ public class UserSocketHandler implements Runnable {
     private void doThisMethod(String method) throws IOException {
         System.out.println("method ===> " + method);
         switch(method) {
+            case "get users":
+                getUsers();
+                break;
             case "add user":
                 saveUser();
                 break;
@@ -63,7 +67,11 @@ public class UserSocketHandler implements Runnable {
         }
     }
 
-
+    private void getUsers() throws IOException {
+        List<User> usersFound = userModel.getAllUsers();
+        String userAsJson = gson.toJson(usersFound);
+        out.println(userAsJson);
+    }
 
     private void saveUser() {
         System.out.println("SAVING USER");

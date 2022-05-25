@@ -1,4 +1,4 @@
-package com.example.datatier_sep3.models;
+package com.example.datatier_sep3.models.entities;
 
 import java.io.Serializable;
 import java.util.List;
