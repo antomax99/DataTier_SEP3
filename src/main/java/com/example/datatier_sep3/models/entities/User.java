@@ -10,6 +10,7 @@ public class User implements Serializable {
     private String lastName;
     private String email;
     private int securityLevel;
+    private Address address;
 
     public User() {
     }
@@ -21,6 +22,7 @@ public class User implements Serializable {
         this.lastName = lastName;
         this.email = email;
         this.securityLevel = securityLevel;
+        address = new Address();
     }
 
     public User(int userId, String userName, String password, String firstName, String lastName, String email, int securityLevel) {
@@ -31,6 +33,7 @@ public class User implements Serializable {
         this.lastName = lastName;
         this.email = email;
         this.securityLevel = securityLevel;
+        address = new Address();
     }
 
     public int getUserId() {
@@ -87,6 +90,14 @@ public class User implements Serializable {
 
     public void setSecurityLevel(int securityLevel) {
         this.securityLevel = securityLevel;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     @Override

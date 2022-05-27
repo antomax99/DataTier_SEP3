@@ -12,8 +12,8 @@ public class Order implements Serializable {
 
     public Order() {}
 
-    public Order(int customerId, double price, List<Product> products, boolean isCompleted) {
-        this.customerId = customerId;
+    public Order(int orderId, double price, List<Product> products, boolean isCompleted) {
+        this.orderId = orderId;
         this.price = price;
         this.products = products;
         this.isCompleted = isCompleted;

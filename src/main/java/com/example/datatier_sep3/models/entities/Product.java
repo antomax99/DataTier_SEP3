@@ -8,22 +8,24 @@ public class Product implements Serializable {
     private String name;
     private String brand;
     private String description;
-
+    private double value;
 
     public Product() {
     }
 
-    public Product(String name, String brand, String description) {
+    public Product(String name, String brand, String description,double value) {
         this.name = name;
         this.brand = brand;
         this.description = description;
+        this.value = value;
     }
 
-    public Product(int productId, String name, String brand, String description) {
+    public Product(int productId, String name, String brand, String description,double value) {
         this.productId = productId;
         this.name = name;
         this.brand = brand;
         this.description = description;
+        this.value = value;
     }
 
     public int getProductId() {
@@ -58,6 +60,14 @@ public class Product implements Serializable {
         this.description = description;
     }
 
+    public double getValue() {
+        return value;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
@@ -67,4 +77,6 @@ public class Product implements Serializable {
                 ", description='" + description + '\'' +
                 '}';
     }
+
+
 }

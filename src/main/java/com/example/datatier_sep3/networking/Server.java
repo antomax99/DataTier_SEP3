@@ -1,5 +1,6 @@
 package com.example.datatier_sep3.networking;
 
+import com.example.datatier_sep3.contracts.OrderModel;
 import com.example.datatier_sep3.contracts.UserModel;
 
 import java.io.IOException;
@@ -20,10 +21,12 @@ public class Server implements Runnable{
     private ServerSocket serverSocket3;
 
     private UserModel userModel;
+    private OrderModel orderModel;
 
 
-    public Server(UserModel userModel){
+    public Server(UserModel userModel, OrderModel orderModel){
         this.userModel = userModel;
+        this.orderModel= orderModel;
 
         try {
             serverSocket1 = new ServerSocket(port1);
@@ -40,12 +43,13 @@ public class Server implements Runnable{
         while(true){
             try {
                 Socket socket1 = serverSocket1.accept();
-//                Socket socket2 = serverSocket1.accept();
+                Socket socket2 = serverSocket2.accept();
 //                Socket socket3 = serverSocket1.accept();
                 System.out.println("client connected");
                 Thread th1 = new Thread(new UserSocketHandler(socket1, userModel));
                 th1.start();
-
+                Thread th2 = new Thread(new OrderSocketHandler(socket2, orderModel));
+                th2.start();
             } catch (IOException e) {
                 e.printStackTrace();
             }
