@@ -11,7 +11,7 @@ public class DataTierSep3Application {
     public static void main(String[] args) {
         SpringApplication.run(DataTierSep3Application.class, args);
         ModelFactory modelFactory = new ModelFactory();
-        Server server = new Server(modelFactory.getUserModel(), modelFactory.getOrderModel());
+        Server server = new Server(modelFactory.getUserModel(), modelFactory.getOrderModel(), modelFactory.getProductModel());
         server.run();
     }
 
