@@ -8,8 +8,8 @@ import java.util.List;
 public interface ProductDAO {
 
     List<Product> getAllProducts() throws IOException;
-    Product getProductsById(int id);
-    void addProducts(Product product) ;
+    Product getProductById(int id);
+    void addProduct(Product product) ;
     void deleteProductById(int id);
     void updateProduct(Product product);
 

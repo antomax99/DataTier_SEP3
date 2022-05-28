@@ -25,21 +25,21 @@ public class OrderModelImpl implements OrderModel {
 
     @Override
     public Order getOrderById(int id) {
-        return null;
+        return orderDAO.getOrderById(id);
     }
 
     @Override
-    public void addOrder(Order user) {
-
+    public void addOrder(Order order) {
+        orderDAO.addOrder(order);
     }
 
     @Override
     public void deleteOrderById(int id) {
-
+        orderDAO.deleteOrderById(id);
     }
 
     @Override
-    public void updateOrder(Order user) {
-
+    public void updateOrder(Order order) {
+        orderDAO.updateOrder(order);
     }
 }

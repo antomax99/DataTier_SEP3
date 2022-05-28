@@ -81,6 +81,7 @@ public class ProductSocketHandler implements Runnable {
     }
 
     private void getProductById() {
+
         try {
             String request = in.readLine();
             int id = gson.fromJson(request, Integer.class);

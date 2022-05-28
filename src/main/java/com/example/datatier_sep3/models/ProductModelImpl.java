@@ -28,21 +28,21 @@ public class ProductModelImpl implements ProductModel {
 
     @Override
     public Product getProductById(int id) {
-        return null;
+        return productDAO.getProductById(id);
     }
 
     @Override
     public void addProduct(Product product) {
-
+        productDAO.addProduct(product);
     }
 
     @Override
     public void deleteProductById(int id) {
-
+        productDAO.deleteProductById(id);
     }
 
     @Override
     public void updateProduct(Product product) {
-
+        productDAO.updateProduct(product);
     }
 }

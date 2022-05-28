@@ -54,9 +54,8 @@ public class ProductDAOImpl implements ProductDAO{
     }
 
     @Override
-    public Product getProductsById(int id) {
-
-
+    public Product getProductById(int id) {
+        System.out.println("GIVEN id IS:"+ id);
         Product productFound = null;
         try(Connection connection = getConnection()) {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM database_sep3.public.products WHERE id = ?");
@@ -70,6 +69,7 @@ public class ProductDAOImpl implements ProductDAO{
                     double value = resultSet.getDouble("value");
 
                     productFound = new Product(id,name,brand,description,value);
+                    System.out.println("Product found: " + productFound.toString());
                 }
             }
         } catch (SQLException e) {
@@ -80,7 +80,7 @@ public class ProductDAOImpl implements ProductDAO{
     }
 
     @Override
-    public void addProducts(Product product) {
+    public void addProduct(Product product) {
         Product result = null;
         try (Connection connection = getConnection()) {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO database_sep3.public.products (name,brand,description, value) VALUES (?,?, ?, ?)",  PreparedStatement.RETURN_GENERATED_KEYS);
