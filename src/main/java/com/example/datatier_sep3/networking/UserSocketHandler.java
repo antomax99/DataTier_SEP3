@@ -35,7 +35,7 @@ public class UserSocketHandler implements Runnable {
             while(true) {
                 System.out.println("WAITING FOR REQUEST");
                 String req = in.readLine();
-                System.out.println("REQUEST ===> " + req);
+                System.out.println("REQUEST <====> " + req);
                 doThisMethod(req);
             }
         } catch (IOException e) {
@@ -44,7 +44,7 @@ public class UserSocketHandler implements Runnable {
     }
 
     private void doThisMethod(String method) throws IOException {
-        System.out.println("method ===> " + method);
+        System.out.println("METHOD <====> " + method);
         switch(method) {
             case "get users":
                 getUsers();
@@ -74,11 +74,10 @@ public class UserSocketHandler implements Runnable {
     }
 
     private void saveUser() {
-        System.out.println("SAVING USER");
         try {
             String request = in.readLine();
             User user = gson.fromJson(request, User.class);
-            System.out.println(user.toString() + " this user is saving.");
+            System.out.println(user.toString() + " saving this user.");
             userModel.addUser(user);
         } catch (IOException e) {
             out.println("Error: User not saved");

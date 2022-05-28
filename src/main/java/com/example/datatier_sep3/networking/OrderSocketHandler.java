@@ -36,7 +36,7 @@ public class OrderSocketHandler implements Runnable {
             while(true) {
                 System.out.println("WAITING FOR REQUEST");
                 String req = in.readLine();
-                System.out.println("REQUEST ===> " + req);
+                System.out.println("REQUEST <====> " + req);
                 doThisMethod(req);
             }
         } catch (IOException e) {
@@ -45,7 +45,7 @@ public class OrderSocketHandler implements Runnable {
     }
 
     private void doThisMethod(String method) throws IOException {
-        System.out.println("method ===> " + method);
+        System.out.println("method <====> " + method);
         switch(method) {
             case "get orders":
                 getOrders();
@@ -72,14 +72,13 @@ public class OrderSocketHandler implements Runnable {
     }
 
     private void saveOrders() {
-        System.out.println("SAVING USER");
         try {
             String request = in.readLine();
             Order order = gson.fromJson(request, Order.class);
-            System.out.println(order.toString() + " this user is saving.");
+            System.out.println(order.toString() + " saving this order");
             orderModel.addOrder(order);
         } catch (IOException e) {
-            out.println("Error: User not saved");
+            out.println("Error: Order not saved");
         }
     }
 

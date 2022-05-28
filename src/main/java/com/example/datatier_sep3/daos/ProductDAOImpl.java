@@ -24,7 +24,7 @@ public class ProductDAOImpl implements ProductDAO{
     }
 
     private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/database_sep3", "postgres", "1234");
+        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/database_sep3", "postgres", "123456");
     }
 
     @Override
@@ -55,21 +55,75 @@ public class ProductDAOImpl implements ProductDAO{
 
     @Override
     public Product getProductsById(int id) {
-        return null;
+
+
+        Product productFound = null;
+        try(Connection connection = getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM database_sep3.public.products WHERE id = ?");
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.isBeforeFirst()){
+                if (resultSet.next()) {
+                    String name = resultSet.getString("name");
+                    String brand = resultSet.getString("brand");
+                    String description = resultSet.getString("description");
+                    double value = resultSet.getDouble("value");
+
+                    productFound = new Product(id,name,brand,description,value);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return productFound;
     }
 
     @Override
     public void addProducts(Product product) {
+        Product result = null;
+        try (Connection connection = getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO database_sep3.public.products (name,brand,description, value) VALUES (?,?, ?, ?)",  PreparedStatement.RETURN_GENERATED_KEYS);
+            statement.setString(1, product.getName());
+            statement.setString(2, product.getBrand());
+            statement.setString(3, product.getDescription());
+            statement.setDouble(4, product.getValue());
+            statement.executeUpdate();
 
+            ResultSet keys = statement.getGeneratedKeys();
+            if (keys.next()) {
+                result = new Product (keys.getInt(1), product.getName(), product.getBrand(), product.getDescription(), product.getValue());
+            } else {
+                throw new SQLException("No key generated");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void deleteProductById(int id) {
-
+        try(Connection connection = getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM database_sep3.public.products WHERE id = ?");
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void updateProduct(Product product) {
+        try(Connection connection = getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("UPDATE database_sep3.public.products SET name = ?, brand = ?, description = ?, value = ? WHERE id = ?");
+            statement.setString(1, product.getName());
+            statement.setString(2, product.getBrand());
+            statement.setString(3, product.getDescription());
+            statement.setDouble(4, product.getValue());
+            statement.executeUpdate();
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

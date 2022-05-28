@@ -34,7 +34,7 @@ public class ProductSocketHandler implements Runnable {
             while(true) {
                 System.out.println("WAITING FOR REQUEST");
                 String req = in.readLine();
-                System.out.println("REQUEST ===> " + req);
+                System.out.println("REQUEST <====> " + req);
                 doThisMethod(req);
             }
         } catch (IOException e) {
@@ -43,7 +43,7 @@ public class ProductSocketHandler implements Runnable {
     }
 
     private void doThisMethod(String method) throws IOException {
-        System.out.println("method ===> " + method);
+        System.out.println("method <====> " + method);
         switch(method) {
             case "get products":
                 getProducts();
@@ -70,14 +70,13 @@ public class ProductSocketHandler implements Runnable {
     }
 
     private void saveProduct() {
-        System.out.println("SAVING USER");
         try {
             String request = in.readLine();
             Product product = gson.fromJson(request, Product.class);
-            System.out.println(product.toString() + " this user is saving.");
+            System.out.println(product.toString() + " saving this product.");
             productModel.addProduct(product);
         } catch (IOException e) {
-            out.println("Error: User not saved");
+            out.println("Error: Product not saved");
         }
     }
 

@@ -1,6 +1,7 @@
 package com.example.datatier_sep3.models.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Order implements Serializable {
@@ -10,8 +11,35 @@ public class Order implements Serializable {
     protected List<Product> products;
     private boolean isCompleted;
 
+
+    /**
+     * Empty constructor for Serializable
+     */
     public Order() {}
 
+
+    /** Main constructor
+     * @param orderId the ID for database, should not be changed
+     * @param customerId the ID of the order 'owner' for database, used as a foreign key for linking orders to users in database
+     * @param price the price of the Order
+     * @param isCompleted denotes if the order is considered a wishlist or completed
+     * @
+     */
+    public Order(int orderId, int customerId, double price, boolean isCompleted) {
+        this.orderId = orderId;
+        this.customerId = customerId;
+        this.price = price;
+        this.products = new ArrayList<>();
+        this.isCompleted = isCompleted;
+    }
+
+    /**
+     * Partial constructor with list of products
+     * @param orderId the ID for database, should not be changed
+     * @param price the price of the Order
+     * @param products list of products in the order
+     * @param isCompleted denotes if the order is considered a wishlist or completed
+     */
     public Order(int orderId, double price, List<Product> products, boolean isCompleted) {
         this.orderId = orderId;
         this.price = price;
@@ -19,6 +47,15 @@ public class Order implements Serializable {
         this.isCompleted = isCompleted;
     }
 
+
+    /**
+     * Full constructor
+     * @param orderId the ID for database, should not be changed
+     * @param customerId the ID of the order 'owner' for database, used as a foreign key for linking orders to users in database
+     * @param price the price of the Order
+     * @param products list of products in the order
+     * @param isCompleted denotes if the order is considered a wishlist or completed
+     */
     public Order(int orderId, int customerId, double price, List<Product> products, boolean isCompleted) {
         this.orderId = orderId;
         this.customerId = customerId;

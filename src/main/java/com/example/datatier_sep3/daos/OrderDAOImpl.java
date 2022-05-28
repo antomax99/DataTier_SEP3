@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+//TODO: Test all methods
 public class OrderDAOImpl implements OrderDAO{
 
     private static OrderDAOImpl instance;
@@ -24,7 +24,7 @@ public class OrderDAOImpl implements OrderDAO{
     }
 
     private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/database_sep3", "postgres", "1234");
+        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/database_sep3", "postgres", "123456");
     }
 
     @Override
@@ -42,7 +42,6 @@ public class OrderDAOImpl implements OrderDAO{
                 Double price = resultSet.getDouble("price");
                 boolean isCompleted = resultSet.getBoolean("completed");
                 Order order = new Order(id,price,null,isCompleted);
-                System.out.println(order.toString());
                 OrdersFound.add(order);
             }
 
@@ -56,21 +55,75 @@ public class OrderDAOImpl implements OrderDAO{
 
     @Override
     public Order getOrderById(int id) {
-        return null;
+
+        Order orderFound = null;
+        try(Connection connection = getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM database_sep3.public.order WHERE id = ?");
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.isBeforeFirst()){
+                if (resultSet.next()) {
+                    int customerId = resultSet.getInt("customerId");
+                    Double price = resultSet.getDouble("price");
+                    boolean isCompleted = resultSet.getBoolean("completed");
+                    //TODO: Get all attached products
+                    orderFound = new Order(id,price,null,isCompleted);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return orderFound;
     }
 
     @Override
-    public void addOrder(Order user) {
+    public void addOrder(Order order) {
+        Order result = null;
+        try (Connection connection = getConnection()) {
+            //TODO: Add products to order
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO database_sep3.public.order (orderId,customerId,price, isCompleted, xxx, ) VALUES (?,?, ?, ?, ?)",  PreparedStatement.RETURN_GENERATED_KEYS);
+            statement.setInt(2, order.getCustomerId());
+            statement.setDouble(3, order.getPrice());
+            statement.setBoolean(4, order.isCompleted());
+            //statement.setString(5, order.getProducts());
+            statement.executeUpdate();
 
+            ResultSet keys = statement.getGeneratedKeys();
+            if (keys.next()) {
+                result = new Order (keys.getInt(1), order.getCustomerId() , order.getPrice(), order.isCompleted());
+            } else {
+                throw new SQLException("No key generated");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void deleteOrderById(int id) {
-
+        try(Connection connection = getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM database_sep3.public.order WHERE id = ?");
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    @Override
-    public void updateOrder(Order user) {
 
+    @Override
+    public void updateOrder(Order order) {
+
+        try(Connection connection = getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("UPDATE database_sep3.public.users SET customerId = ?, price = ?, isCompleted = ? WHERE id = ?");
+            statement.setInt(1, order.getCustomerId());
+            statement.setDouble(2, order.getPrice());
+            statement.setBoolean(3, order.isCompleted());
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
