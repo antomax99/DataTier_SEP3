@@ -37,6 +37,11 @@ public class ProductModelImpl implements ProductModel {
     }
 
     @Override
+    public void addProductToOrder(Product product, int orderId) {
+        productDAO.addProductToOrder(product,orderId);
+    }
+
+    @Override
     public void deleteProductById(int id) {
         productDAO.deleteProductById(id);
     }

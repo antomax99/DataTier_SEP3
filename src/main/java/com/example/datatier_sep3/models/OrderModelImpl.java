@@ -24,6 +24,11 @@ public class OrderModelImpl implements OrderModel {
     }
 
     @Override
+    public List<Order> getOrdersFromUser(int userID) throws IOException {
+        return orderDAO.getOrdersFromUser(userID);
+    }
+
+    @Override
     public Order getOrderById(int id) {
         return orderDAO.getOrderById(id);
     }

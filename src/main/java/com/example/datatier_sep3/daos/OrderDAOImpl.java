@@ -1,6 +1,7 @@
 package com.example.datatier_sep3.daos;
 
 import com.example.datatier_sep3.models.entities.Order;
+import com.example.datatier_sep3.models.entities.Product;
 import com.example.datatier_sep3.models.entities.User;
 
 import java.io.IOException;
@@ -53,6 +54,39 @@ public class OrderDAOImpl implements OrderDAO{
         return OrdersFound;
     }
 
+    //TODO: Fix this, it dose not see "customerId" as a column
+    @Override
+    public List<Order> getOrdersFromUser(int userID) throws IOException {
+
+        List<Order> OrdersFound = new ArrayList<>();
+        try(Connection connection = getConnection()) {
+
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM database_sep3.public.order WHERE id = ? ");
+            statement.setInt(1, userID);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                int id = resultSet.getInt("id");
+                System.out.println(id);
+                int customerId = resultSet.getInt("customerId");
+                Double price = resultSet.getDouble("price");
+                boolean isCompleted = resultSet.getBoolean("completed");
+                Product p = new Product("name","test product brand","test product description", 245);
+                ArrayList<Product>products = new ArrayList<Product>();
+                products.add(p);products.add(p);products.add(p);products.add(p);
+                Order order = new Order(id,userID,price,products,isCompleted);
+                OrdersFound.add(order);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(OrdersFound.toString());
+        return OrdersFound;
+
+    }
+
     @Override
     public Order getOrderById(int id) {
 
@@ -67,7 +101,10 @@ public class OrderDAOImpl implements OrderDAO{
                     Double price = resultSet.getDouble("price");
                     boolean isCompleted = resultSet.getBoolean("completed");
                     //TODO: Get all attached products
-                    orderFound = new Order(id,price,null,isCompleted);
+                    Product p = new Product("name","test product brand","test product description", 245);
+                    ArrayList<Product>products = new ArrayList<Product>();
+                    products.add(p);products.add(p);products.add(p);products.add(p);
+                    orderFound = new Order(id,customerId,price,products,isCompleted);
                 }
             }
         } catch (SQLException e) {

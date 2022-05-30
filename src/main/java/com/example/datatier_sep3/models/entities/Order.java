@@ -93,6 +93,11 @@ public class Order implements Serializable {
     }
 
     public void setProducts(List<Product> products) {
+        int newValue=0;
+        for(Product p : this.products){
+            newValue+=p.getValue();
+        }
+        this.price=newValue;
         this.products = products;
     }
 

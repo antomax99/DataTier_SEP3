@@ -50,6 +50,9 @@ public class OrderSocketHandler implements Runnable {
             case "get orders":
                 getOrders();
                 break;
+            case  "get orders from user":
+                getOrdersFromUser();
+                break;
             case "add order":
                 saveOrders();
                 break;
@@ -68,6 +71,19 @@ public class OrderSocketHandler implements Runnable {
     private void getOrders() throws IOException {
         List<Order> ordersFound = orderModel.getAllOrders();
         String userAsJson = gson.toJson(ordersFound);
+        out.println(userAsJson);
+    }
+    private void getOrdersFromUser() throws IOException {
+
+
+        String request = in.readLine();
+        int userID = gson.fromJson(request, Integer.class);
+
+        System.out.println(userID +" getOrdersFromUser");
+
+        List<Order> ordersFound = orderModel.getOrdersFromUser(userID);
+        String userAsJson = gson.toJson(ordersFound);
+
         out.println(userAsJson);
     }
 

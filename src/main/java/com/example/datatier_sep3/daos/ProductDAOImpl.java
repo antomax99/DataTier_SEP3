@@ -102,6 +102,11 @@ public class ProductDAOImpl implements ProductDAO{
     }
 
     @Override
+    public void addProductToOrder(Product product, int orderId) {
+
+    }
+
+    @Override
     public void deleteProductById(int id) {
         try(Connection connection = getConnection()) {
             PreparedStatement statement = connection.prepareStatement("DELETE FROM database_sep3.public.products WHERE id = ?");
