@@ -3,7 +3,7 @@ package com.example.datatier_sep3.models;
 
 import com.example.datatier_sep3.contracts.UserModel;
 import com.example.datatier_sep3.daos.UserDAOImpl;
-import com.example.datatier_sep3.models.entities.User;
+import com.example.datatier_sep3.entities.User;
 
 import java.io.IOException;
 import java.sql.SQLException;

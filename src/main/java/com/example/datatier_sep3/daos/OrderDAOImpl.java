@@ -1,8 +1,8 @@
 package com.example.datatier_sep3.daos;
 
-import com.example.datatier_sep3.models.entities.Order;
-import com.example.datatier_sep3.models.entities.Product;
-import com.example.datatier_sep3.models.entities.User;
+import com.example.datatier_sep3.entities.Order;
+import com.example.datatier_sep3.entities.Product;
+
 
 import java.io.IOException;
 import java.sql.*;
@@ -25,7 +25,7 @@ public class OrderDAOImpl implements OrderDAO{
     }
 
     private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/database_sep3", "postgres", "123456");
+        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/database_sep3", "postgres", "1234");
     }
 
     @Override
@@ -54,15 +54,14 @@ public class OrderDAOImpl implements OrderDAO{
         return OrdersFound;
     }
 
-    //TODO: Fix this, it dose not see "customerId" as a column
+    //TODO: Add products to order
     @Override
     public List<Order> getOrdersFromUser(int userID) throws IOException {
 
         List<Order> OrdersFound = new ArrayList<>();
         try(Connection connection = getConnection()) {
 
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM database_sep3.public.order WHERE id = ? ");
-            statement.setInt(1, userID);
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM public.order o INNER JOIN public.users u on o.\"customerId\"=u.id where u.id="+userID);
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()){

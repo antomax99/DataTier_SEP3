@@ -1,6 +1,6 @@
 package com.example.datatier_sep3.networking;
 
-import com.example.datatier_sep3.models.entities.User;
+import com.example.datatier_sep3.entities.User;
 import com.example.datatier_sep3.contracts.UserModel;
 import com.google.gson.Gson;
 

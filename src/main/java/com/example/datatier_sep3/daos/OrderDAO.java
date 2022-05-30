@@ -1,6 +1,6 @@
 package com.example.datatier_sep3.daos;
 
-import com.example.datatier_sep3.models.entities.Order;
+import com.example.datatier_sep3.entities.Order;
 
 import java.io.IOException;
 import java.util.List;

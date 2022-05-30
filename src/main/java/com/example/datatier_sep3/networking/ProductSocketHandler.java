@@ -1,8 +1,7 @@
 package com.example.datatier_sep3.networking;
 
 import com.example.datatier_sep3.contracts.ProductModel;
-import com.example.datatier_sep3.models.entities.Product;
-import com.example.datatier_sep3.models.entities.User;
+import com.example.datatier_sep3.entities.Product;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
