@@ -52,11 +52,11 @@ public class OrderSocketHandler implements Runnable {
             case  "get orders from user":
                 getOrdersFromUser();
                 break;
-            case "add order":
-                saveOrders();
-                break;
             case "get order by id":
                 getOrderById();
+                break;
+            case "add order":
+                saveOrders();
                 break;
             case "delete order by id":
                 deleteOrderById();
@@ -78,7 +78,6 @@ public class OrderSocketHandler implements Runnable {
         String request = in.readLine();
         int userID = gson.fromJson(request, Integer.class);
 
-        System.out.println(userID +" getOrdersFromUser");
 
         List<Order> ordersFound = orderModel.getOrdersFromUser(userID);
         String userAsJson = gson.toJson(ordersFound);

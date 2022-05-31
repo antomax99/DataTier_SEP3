@@ -1,4 +1,4 @@
-package com.example.datatier_sep3.daos;
+package com.example.datatier_sep3.daos.interfaces;
 
 import com.example.datatier_sep3.entities.Order;
 

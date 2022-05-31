@@ -2,6 +2,7 @@ package com.example.datatier_sep3.daos;
 
 
 
+import com.example.datatier_sep3.daos.interfaces.ProductDAO;
 import com.example.datatier_sep3.entities.Product;
 
 import java.io.IOException;
@@ -9,7 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductDAOImpl implements ProductDAO{
+public class ProductDAOImpl implements ProductDAO {
 
     private static ProductDAOImpl instance;
 
@@ -25,7 +26,7 @@ public class ProductDAOImpl implements ProductDAO{
     }
 
     private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/database_sep3", "postgres", "1234");
+        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/database_sep3", "postgres", "123456");
     }
 
     @Override
@@ -56,14 +57,17 @@ public class ProductDAOImpl implements ProductDAO{
 
     @Override
     public Product getProductById(int id) {
-        System.out.println("GIVEN id IS:"+ id);
         Product productFound = null;
+
         try(Connection connection = getConnection()) {
+
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM database_sep3.public.products WHERE id = ?");
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
+
             if(resultSet.isBeforeFirst()){
                 if (resultSet.next()) {
+
                     String name = resultSet.getString("name");
                     String brand = resultSet.getString("brand");
                     String description = resultSet.getString("description");
@@ -71,8 +75,10 @@ public class ProductDAOImpl implements ProductDAO{
 
                     productFound = new Product(id,name,brand,description,value);
                     System.out.println("Product found: " + productFound.toString());
+
                 }
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

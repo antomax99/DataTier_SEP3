@@ -1,5 +1,6 @@
 package com.example.datatier_sep3.daos;
 
+import com.example.datatier_sep3.daos.interfaces.UserDAO;
 import com.example.datatier_sep3.entities.User;
 
 
@@ -24,7 +25,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/database_sep3", "postgres", "1234");
+        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/database_sep3", "postgres", "123456");
     }
 
 

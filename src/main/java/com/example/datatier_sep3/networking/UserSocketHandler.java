@@ -49,14 +49,14 @@ public class UserSocketHandler implements Runnable {
             case "get users":
                 getUsers();
                 break;
-            case "add user":
-                saveUser();
-                break;
             case "get user by username":
                 getUserByUsername();
                 break;
             case "get user by id":
                 getUserById();
+                break;
+            case "add user":
+                saveUser();
                 break;
             case "delete user by id":
                 deleteUserById();

@@ -47,11 +47,11 @@ public class ProductSocketHandler implements Runnable {
             case "get products":
                 getProducts();
                 break;
-            case "add product":
-                saveProduct();
-                break;
             case "get product by id":
                 getProductById();
+                break;
+            case "add product":
+                saveProduct();
                 break;
             case "delete product by id":
                 deleteProductById();

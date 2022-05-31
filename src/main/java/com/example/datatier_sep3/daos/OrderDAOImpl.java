@@ -1,5 +1,6 @@
 package com.example.datatier_sep3.daos;
 
+import com.example.datatier_sep3.daos.interfaces.OrderDAO;
 import com.example.datatier_sep3.entities.Order;
 import com.example.datatier_sep3.entities.Product;
 
@@ -9,7 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 //TODO: Test all methods
-public class OrderDAOImpl implements OrderDAO{
+public class OrderDAOImpl implements OrderDAO {
 
     private static OrderDAOImpl instance;
 
@@ -25,7 +26,7 @@ public class OrderDAOImpl implements OrderDAO{
     }
 
     private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/database_sep3", "postgres", "1234");
+        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/database_sep3", "postgres", "123456");
     }
 
     @Override
@@ -65,14 +66,15 @@ public class OrderDAOImpl implements OrderDAO{
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()){
+
                 int id = resultSet.getInt("id");
-                System.out.println(id);
-                int customerId = resultSet.getInt("customerId");
                 Double price = resultSet.getDouble("price");
                 boolean isCompleted = resultSet.getBoolean("completed");
+
                 Product p = new Product("name","test product brand","test product description", 245);
                 ArrayList<Product>products = new ArrayList<Product>();
                 products.add(p);products.add(p);products.add(p);products.add(p);
+
                 Order order = new Order(id,userID,price,products,isCompleted);
                 OrdersFound.add(order);
             }
@@ -118,10 +120,11 @@ public class OrderDAOImpl implements OrderDAO{
         Order result = null;
         try (Connection connection = getConnection()) {
             //TODO: Add products to order
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO database_sep3.public.order (orderId,customerId,price, isCompleted, xxx, ) VALUES (?,?, ?, ?, ?)",  PreparedStatement.RETURN_GENERATED_KEYS);
-            statement.setInt(2, order.getCustomerId());
-            statement.setDouble(3, order.getPrice());
-            statement.setBoolean(4, order.isCompleted());
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO database_sep3.public.order (\"customerId\",price,completed ) VALUES (?,?, ?)",  PreparedStatement.RETURN_GENERATED_KEYS);
+
+            statement.setInt(1, order.getCustomerId());
+            statement.setDouble(2, order.getPrice());
+            statement.setBoolean(3, order.isCompleted());
             //statement.setString(5, order.getProducts());
             statement.executeUpdate();
 
