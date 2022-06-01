@@ -74,7 +74,6 @@ public class OrderSocketHandler implements Runnable {
     }
     private void getOrdersFromUser() throws IOException {
 
-
         String request = in.readLine();
         int userID = gson.fromJson(request, Integer.class);
 

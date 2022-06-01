@@ -43,7 +43,7 @@ public class OrderDAOImpl implements OrderDAO {
                 int customerId = resultSet.getInt("customerId");
                 Double price = resultSet.getDouble("price");
                 boolean isCompleted = resultSet.getBoolean("completed");
-                Order order = new Order(id,price,null,isCompleted);
+                Order order = new Order(id,customerId,price,null,isCompleted);
                 OrdersFound.add(order);
             }
 
@@ -84,8 +84,21 @@ public class OrderDAOImpl implements OrderDAO {
         }
 
         System.out.println(OrdersFound.toString());
-        return OrdersFound;
 
+        //Check if there are any Wishlists
+        boolean activeOrder = false;
+
+        for(Order order: OrdersFound)
+            if (!order.isCompleted()){
+                activeOrder=true;
+                break;
+            }
+        //On no wishlist, create a new one for current user and reload OrdersFound with the new orders
+        if (!activeOrder){
+            addOrder(new Order(0,userID,0,null,false));
+            OrdersFound= getOrdersFromUser(userID); //Method needs calling so the new order can be given an ID by database
+        }
+        return OrdersFound;
     }
 
     @Override
@@ -93,47 +106,51 @@ public class OrderDAOImpl implements OrderDAO {
 
         Order orderFound = null;
         try(Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM database_sep3.public.order WHERE id = ?");
-            statement.setInt(1, id);
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM database_sep3.public.order, database_sep3.public.order_products, database_sep3.public.products WHERE database_sep3.public.products.id = database_sep3.public.order_products.product_id AND database_sep3.public.order.id = database_sep3.public.order_products.order_id ");
             ResultSet resultSet = statement.executeQuery();
             if(resultSet.isBeforeFirst()){
                 if (resultSet.next()) {
+                    int productId = resultSet.getInt("id");
+                    String name = resultSet.getString("name");
+                    String brand = resultSet.getString("brand");
+                    String description = resultSet.getString("description");
+                    double value = resultSet.getDouble("value");
+                    Product productFound = new Product(productId,name,brand,description,value);
+                    List<Product> products = new ArrayList<>();
+                    products.add(productFound);
+
+                    int orderId = resultSet.getInt("id");
                     int customerId = resultSet.getInt("customerId");
-                    Double price = resultSet.getDouble("price");
-                    boolean isCompleted = resultSet.getBoolean("completed");
-                    //TODO: Get all attached products
-                    Product p = new Product("name","test product brand","test product description", 245);
-                    ArrayList<Product>products = new ArrayList<Product>();
-                    products.add(p);products.add(p);products.add(p);products.add(p);
-                    orderFound = new Order(id,customerId,price,products,isCompleted);
+                    double price = resultSet.getDouble("price");
+                    boolean completed = resultSet.getBoolean("completed");
+                    orderFound = new Order(orderId,customerId,price,products,completed);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return orderFound;
     }
 
     @Override
     public void addOrder(Order order) {
-        Order result = null;
+        List<Product> products = order.getProducts();
         try (Connection connection = getConnection()) {
-            //TODO: Add products to order
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO database_sep3.public.order (\"customerId\",price,completed ) VALUES (?,?, ?)",  PreparedStatement.RETURN_GENERATED_KEYS);
 
-            statement.setInt(1, order.getCustomerId());
-            statement.setDouble(2, order.getPrice());
-            statement.setBoolean(3, order.isCompleted());
-            //statement.setString(5, order.getProducts());
+            for(int i = 0; i < products.size(); i ++)
+            {
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO database_sep3.public.order_products (order_id,product_id) VALUES (?,?)");
+                statement.setInt(1,order.getOrderId());
+                statement.setInt(2,products.get(i).getProductId());
+            }
+
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO database_sep3.public.order (orderId,customerId,price, isCompleted) VALUES (?,?,?,?)",  PreparedStatement.RETURN_GENERATED_KEYS);
+            statement.setInt(1, order.getOrderId());
+            statement.setInt(2, order.getCustomerId());
+            statement.setDouble(3, order.getPrice());
+            statement.setBoolean(4, order.isCompleted());
             statement.executeUpdate();
 
-            ResultSet keys = statement.getGeneratedKeys();
-            if (keys.next()) {
-                result = new Order (keys.getInt(1), order.getCustomerId() , order.getPrice(), order.isCompleted());
-            } else {
-                throw new SQLException("No key generated");
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -155,7 +172,8 @@ public class OrderDAOImpl implements OrderDAO {
     public void updateOrder(Order order) {
 
         try(Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("UPDATE database_sep3.public.users SET customerId = ?, price = ?, isCompleted = ? WHERE id = ?");
+            PreparedStatement statement = connection.prepareStatement("UPDATE database_sep3.public.users SET \"customerId\" = ?, price = ?, isCompleted = ? WHERE id = ?");
+
             statement.setInt(1, order.getCustomerId());
             statement.setDouble(2, order.getPrice());
             statement.setBoolean(3, order.isCompleted());
