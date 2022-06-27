@@ -26,7 +26,7 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/database_sep3", "postgres", "123456");
+        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/database_sep3", "postgres", "1234");
     }
 
     @Override

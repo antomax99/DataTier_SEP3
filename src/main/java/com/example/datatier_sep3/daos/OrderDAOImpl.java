@@ -26,7 +26,7 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/database_sep3", "postgres", "123456");
+        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/database_sep3", "postgres", "1234");
     }
 
     @Override
@@ -105,30 +105,37 @@ public class OrderDAOImpl implements OrderDAO {
     public Order getOrderById(int id) {
 
         Order orderFound = null;
+        List<Product> products = new ArrayList<>();
         try(Connection connection = getConnection()) {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM database_sep3.public.order, database_sep3.public.order_products, database_sep3.public.products WHERE database_sep3.public.products.id = database_sep3.public.order_products.product_id AND database_sep3.public.order.id = database_sep3.public.order_products.order_id ");
             ResultSet resultSet = statement.executeQuery();
             if(resultSet.isBeforeFirst()){
-                if (resultSet.next()) {
-                    int productId = resultSet.getInt("id");
-                    String name = resultSet.getString("name");
-                    String brand = resultSet.getString("brand");
-                    String description = resultSet.getString("description");
-                    double value = resultSet.getDouble("value");
-                    Product productFound = new Product(productId,name,brand,description,value);
-                    List<Product> products = new ArrayList<>();
-                    products.add(productFound);
 
+                while (resultSet.next()) {
                     int orderId = resultSet.getInt("id");
                     int customerId = resultSet.getInt("customerId");
                     double price = resultSet.getDouble("price");
                     boolean completed = resultSet.getBoolean("completed");
-                    orderFound = new Order(orderId,customerId,price,products,completed);
+
+                    orderFound = new Order(orderId, customerId, price, null, completed);
+
+                        int productId = resultSet.getInt("product_id");
+                        String name = resultSet.getString("name");
+                        String brand = resultSet.getString("brand");
+                        String description = resultSet.getString("description");
+                        double value = resultSet.getDouble("value");
+                        Product productFound = new Product(productId, name, brand, description, value);
+
+                        System.out.println("Adding product");
+                        products.add(productFound);
                 }
+            orderFound.setProducts(products);
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        System.out.println("Returned order:" +orderFound.toString());
         return orderFound;
     }
 
